@@ -1,0 +1,118 @@
+
+#include <iostream>
+using namespace std;
+
+class Customer
+{
+  private:
+    int ID;
+    char region;
+    int type;
+    int oldIndex;
+    int newIndex;
+  public:
+    void inputCustomer (Customer &cus)
+    {
+        cout << "Nhap ID khach hang: ";
+        cin >> ID;
+
+        cout << "Nhap khu vuc (A, B, C, D, E): ";
+        cin >> region;
+
+        cout << "Nhap loai dien (1 or 2): ";
+        cin >> type;
+
+        cout << "Nhap chi so cu: ";
+        cin >> oldIndex;
+
+        cout << "Nhap chi so moi: ";
+        cin >> newIndex;
+    }
+    int getCustomerID() const { return ID; }
+    char getRegion() const { return region; }
+    char getType() const { return type; }
+    int getOldIndex() const { return oldIndex; }
+    int getNewIndex() const { return newIndex; }
+};
+class ElectricityCompany
+{
+    public:
+       float tienDienTheoKhuVuc (char region,int type)
+       {
+        if(type==1){
+            if(region =='A'){return 500;}
+            else if(region == 'B'){return 460;}
+            else if(region == 'C'){return 450;}
+            else if(region == 'D'){return 420;}
+            else if(region == 'E'){return 410;}
+            else {cout <<"Khu vuc khong ton tai!\n";return 0; }
+        }else if(type==2){
+            if(region =='A'){return 450;}
+            else if(region == 'B'){return 440;}
+            else if(region == 'C'){return 430;}
+            else if(region == 'D'){return 420;}
+            else if(region == 'E'){return 400;}
+            else {cout <<"Khu vuc khong ton tai!\n";return 0; }
+        }else{
+            cout <<"Khu vuc khong ton tai!\n";
+            return 0;
+           }
+       }
+       int dienSuDung (int oldIndex,int newIndex)
+       {
+           return newIndex - oldIndex;
+       }
+      void inDanhSachTheoKhuVuc(const Customer *customerList, int n, char region)
+    {
+        bool found = false;
+        for (int i = 0; i < n; ++i)
+        {
+            const Customer &cus = customerList[i];
+            if (cus.getRegion() == region)
+            {
+                if (!found)
+                {
+                    cout << "Khach hang trong khu vuc " << region << ":" << endl;
+                    found = true;
+                }
+                cout << "+ Customer ID: " << cus.getCustomerID() << ", Usage : " << cus.getNewIndex()-cus.getOldIndex()
+                     << ", Bill : " << tienDienTheoKhuVuc(cus.getRegion(),cus.getType())*(cus.getNewIndex()-cus.getOldIndex())<< endl;
+            }
+        }
+        if (!found)
+        {
+            cout << "Khong co khach hang nao trong khu vuc nay. " << region << endl;
+        }
+    }
+};
+
+int main()
+{
+    int n;
+    cout << "Nhap so luong khach hang: ";
+    cin >> n;
+    Customer *customerList = new Customer[n];
+    for (int i = 0; i < n; ++i)
+    {
+        cout <<"--------------------\n";
+        customerList[i].inputCustomer(customerList[i]);
+    }
+
+   while (true)
+   {
+    cout <<"--------------------\n";
+    cout << "Nhap khu vuc muon hien thi (A, B, C, D, E, 0 to exit) : ";
+    char selectedRegion;
+    cin >> selectedRegion;
+   if(selectedRegion=='0')
+   {
+    break;
+   }else {
+    ElectricityCompany company;
+    company.inDanhSachTheoKhuVuc(customerList, n, selectedRegion);
+   }
+   }
+    delete[] customerList;
+
+    return 0;
+}
